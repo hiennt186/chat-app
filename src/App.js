@@ -4,6 +4,7 @@ import SignIn from './components/SignIn';
 import ChatRoom from './components/ChatRoom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from './firebase';
+import Notifications from './components/Notifications';
 
 function App() {
   const [user, loading] = useAuthState(auth);
@@ -14,6 +15,7 @@ function App() {
 
   return (
     <div className="App">
+      <Notifications />
       <header>
         <h1>React Firebase Chat</h1>
         <SignOut />

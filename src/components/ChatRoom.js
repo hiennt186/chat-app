@@ -1,7 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { collection, query, orderBy, limit, addDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase';
+import { onMessage } from 'firebase/messaging';
+import { messaging } from '../firebase';
 
 function ChatRoom() {
   const dummy = useRef();
@@ -36,6 +38,20 @@ function ChatRoom() {
       console.error('Error sending message:', error);
     }
   }
+
+  useEffect(() => {
+    const unsubscribe = onMessage(messaging, (payload) => {
+      console.log('Message received. ', payload);
+      new Notification(payload.notification.title, {
+        body: payload.notification.body,
+        icon: '/logo192.png'
+      });
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <>
